@@ -575,7 +575,7 @@ public class Plugin extends Aware_Plugin {
 	private boolean randomCheck(){
 		Random r= new Random();
 		int num = r.nextInt(101);
-		if(num<-1){
+		if(num<51){
 			Log.e(TAG,"random check TRUE");
 			return true;
 		}
