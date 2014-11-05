@@ -37,6 +37,7 @@ public class Plugin extends Aware_Plugin {
 
 	public static final String ACTION_AWARE_DATACOLLECTION = "ACTION_AWARE_DATACOLLECTION";
 	private DataCollection_DB db;
+<<<<<<< HEAD
 	private String type;
 	private long lastTimestamp;
 	private boolean randomFlag;
@@ -56,10 +57,33 @@ public class Plugin extends Aware_Plugin {
 	private long lastSync;
 	private long tempSync;
 	private int timeout;
+=======
+	private String data;
+	private String type;
+	private long lastTimestamp = 0;
+	private boolean randomFlag = false;
+	private boolean busyFlag = false;
+	private boolean inCall = false;
+	private boolean esmOn = false;
+	private boolean devFlag = false;
+	private boolean appFlag = false;
+	private boolean screenFlag = true;
+	private boolean gsmFlag = false;
+	private boolean cdmaFlag = false;
+	private long timer;
+	private String deviceId = "0";
+	private int labelId = -1;
+	private String lastActivity = "";
+	private long lastTime = 0;
+	private long lastSync = 0;
+	private long tempSync = 0;
+	private int timeout = 15;
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 	SharedPreferences preferences;
 	SharedPreferences.Editor edit;
 	Context context;
 
+<<<<<<< HEAD
     private void initVars(){
         lastTimestamp = 0;
         randomFlag = true;
@@ -80,17 +104,24 @@ public class Plugin extends Aware_Plugin {
         timeout = 15;
     }
 
+=======
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		context = this;
 
+<<<<<<< HEAD
         initVars();
 
         Aware.setSetting(this, Aware_Preferences.DEBUG_FLAG, true);
 		//activate the sensors
         Aware.setSetting(getApplicationContext(), Aware_Preferences.STATUS_APPLICATIONS, true);
 
+=======
+        Aware.setSetting(this, Aware_Preferences.DEBUG_FLAG, true);
+		//activate the sensors
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 		Aware.setSetting(getApplicationContext(), Aware_Preferences.STATUS_BAROMETER, true);
 		Aware.setSetting(getApplicationContext(), Aware_Preferences.FREQUENCY_BAROMETER,300000);
 
@@ -121,7 +152,11 @@ public class Plugin extends Aware_Plugin {
 		if(id<0){
 			edit = preferences.edit();
 			edit.putInt("labelId",1);
+<<<<<<< HEAD
 			edit.apply();
+=======
+			edit.commit();
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 			labelId = 1;
 		}
 		else{
@@ -203,7 +238,11 @@ public class Plugin extends Aware_Plugin {
 		registerReceiver(timeoutReceiver, timeoutfilter);
 
 		IntentFilter noIssuefilter = new IntentFilter();
+<<<<<<< HEAD
 		noIssuefilter.addAction("noIssue");
+=======
+		timeoutfilter.addAction("noIssue");
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 		registerReceiver(noIssueReceiver, noIssuefilter);
 
 		IntentFilter taskChosenfilter = new IntentFilter();
@@ -240,7 +279,11 @@ public class Plugin extends Aware_Plugin {
 		SharedPreferences sp = getSharedPreferences("deviceID", MODE_PRIVATE);
 		SharedPreferences.Editor edit = sp.edit();
 		edit.putString("deviceId",deviceId);
+<<<<<<< HEAD
 		edit.apply();
+=======
+		edit.commit();
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 
 		PhoneStateListener callStateListener = new PhoneStateListener() {
 			public void onCallStateChanged(int state, String incomingNumber) {
@@ -302,11 +345,17 @@ public class Plugin extends Aware_Plugin {
 					appName = appCursor.getString(appCursor.getColumnIndex(Applications_Foreground.APPLICATION_NAME));
 				}while(appCursor.moveToNext());
 			}
+<<<<<<< HEAD
             if (appCursor != null) {
                 appCursor.close();
             }
 
             try{
+=======
+			appCursor.close();	
+
+			try{	
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 				Log.v(TAG, "Application logged is " + appName);
 				// place data in application info table
 				db = new DataCollection_DB (context);
@@ -355,7 +404,11 @@ public class Plugin extends Aware_Plugin {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Log.i(TAG,"screen on");
+<<<<<<< HEAD
 			//appFlag = false;
+=======
+			appFlag = false;
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 			screenFlag = true;
 		}
 	};
@@ -425,7 +478,12 @@ public class Plugin extends Aware_Plugin {
 		public void onReceive(Context context, Intent intent) {
 			Bundle bundle = intent.getExtras();
 			String type = bundle.getString("type");
+<<<<<<< HEAD
 			startESM(type);
+=======
+			String data = bundle.getString("data");
+			startESM(type, data);
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 		}
 	};
 	BroadcastReceiver answerLaterReceiver = new BroadcastReceiver(){
@@ -433,6 +491,10 @@ public class Plugin extends Aware_Plugin {
 		public void onReceive(Context context, Intent intent) {
 			Bundle bundle = intent.getExtras();
 			type = bundle.getString("type");
+<<<<<<< HEAD
+=======
+			data = bundle.getString("data");
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 			int timeout = bundle.getInt("timeout");
 			Log.v(TAG, "launch the ESM in " + Integer.toString(timeout)+" minutes");
 
@@ -454,7 +516,11 @@ public class Plugin extends Aware_Plugin {
 					Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 					long[] pattern = {150,700,150,700,300,700,300,700,450,700,450,700};
 					v.vibrate(pattern,-1);
+<<<<<<< HEAD
 					startESM(type);
+=======
+					startESM(type, data);
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 				}
 			}, timeout * 60000); // ----- this is for timeout minutes
 		}
@@ -575,7 +641,11 @@ public class Plugin extends Aware_Plugin {
 	private boolean randomCheck(){
 		Random r= new Random();
 		int num = r.nextInt(101);
+<<<<<<< HEAD
 		if(num<51){
+=======
+		if(num<50){
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 			Log.e(TAG,"random check TRUE");
 			return true;
 		}
@@ -651,7 +721,12 @@ public class Plugin extends Aware_Plugin {
 		return true;
 	}
 
+<<<<<<< HEAD
 	public void startESM(String trigger) {
+=======
+	public void startESM(String trigger, String data) {
+
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 		Log.v(TAG, "Create ESM and display. Trigger is "+trigger);	
 		//Aware.setSetting(getContentResolver(), Aware_Preferences.STATUS_ESM, true);
 
@@ -661,6 +736,10 @@ public class Plugin extends Aware_Plugin {
 			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			i.putExtra("type",trigger);
 			startActivity(i);
+<<<<<<< HEAD
+=======
+			return;
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 		}
 		else{
 			Intent i = new Intent();
@@ -668,6 +747,10 @@ public class Plugin extends Aware_Plugin {
 			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			i.putExtra("type",trigger);
 			startActivity(i);
+<<<<<<< HEAD
+=======
+			return;
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 		}
 	}
 
@@ -676,7 +759,11 @@ public class Plugin extends Aware_Plugin {
 
 		saveUsageData();
 
+<<<<<<< HEAD
         db = new DataCollection_DB (this);
+=======
+		db = new DataCollection_DB (this);
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 		Labels labels = new Labels();
 
 		labels.setCellId(deviceId);
@@ -691,7 +778,11 @@ public class Plugin extends Aware_Plugin {
 		labelId++;
 		edit = preferences.edit();
 		edit.putInt("labelId",labelId);
+<<<<<<< HEAD
 		edit.apply();
+=======
+		edit.commit();
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 	}
 
 	public void saveUsageData() {
@@ -761,11 +852,17 @@ public class Plugin extends Aware_Plugin {
 			rowData.put(DataCollection.LOCATION, location);
 		}
 
+<<<<<<< HEAD
         if (locationCursor != null) {
             locationCursor.close();
         }
 
         if(rowData.size() > 0)
+=======
+		locationCursor.close();
+
+		if(rowData.size() > 0)
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 			getContentResolver().insert(DataCollection.CONTENT_URI, rowData);
 
 		// WiFi information
@@ -785,11 +882,17 @@ public class Plugin extends Aware_Plugin {
 			}while(barometerCursor.moveToNext());
 		}
 
+<<<<<<< HEAD
         if (barometerCursor != null) {
             barometerCursor.close();
         }
 
         if((System.currentTimeMillis() - last_Timestamp) < 300000)
+=======
+		barometerCursor.close();
+
+		if((System.currentTimeMillis() - last_Timestamp) < 300000)
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 			rowData.put(DataCollection.BAROMETER_STATUS, barometer);
 
 		String tower = "-1";
@@ -803,11 +906,17 @@ public class Plugin extends Aware_Plugin {
 				}while(cdmaCursor.moveToNext());
 			}
 
+<<<<<<< HEAD
             if (cdmaCursor != null) {
                 cdmaCursor.close();
             }
 
             if((System.currentTimeMillis() - last_Timestamp) < 300000)
+=======
+			cdmaCursor.close();
+
+			if((System.currentTimeMillis() - last_Timestamp) < 300000)
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 				rowData.put(DataCollection.TOWER, tower);
 		}
 		else if(gsmFlag){
@@ -819,11 +928,17 @@ public class Plugin extends Aware_Plugin {
 				}while(gsmCursor.moveToNext());
 			}
 
+<<<<<<< HEAD
             if (gsmCursor != null) {
                 gsmCursor.close();
             }
 
             if((System.currentTimeMillis() - last_Timestamp) < 300000)
+=======
+			gsmCursor.close();
+
+			if((System.currentTimeMillis() - last_Timestamp) < 300000)
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 				rowData.put(DataCollection.TOWER, tower);
 		}
 
@@ -840,7 +955,10 @@ public class Plugin extends Aware_Plugin {
 	public void onDestroy() {
 		super.onDestroy();
 		//turn off sensors
+<<<<<<< HEAD
         Aware.setSetting(getApplicationContext(), Aware_Preferences.STATUS_APPLICATIONS, false);
+=======
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 		Aware.setSetting(getApplicationContext(), Aware_Preferences.STATUS_BAROMETER, false);
 		Aware.setSetting(getApplicationContext(), Aware_Preferences.STATUS_BATTERY, false);
 		Aware.setSetting(getApplicationContext(), Aware_Preferences.STATUS_COMMUNICATION_EVENTS, false);
@@ -870,6 +988,10 @@ public class Plugin extends Aware_Plugin {
 		unregisterReceiver(syncReceiver);
 		unregisterReceiver(screenOnReceiver);
 
+<<<<<<< HEAD
 		Aware.setSetting(getApplicationContext(), Settings.ACTION_AWARE_DATA_COLLECTION_STATUS, false);
+=======
+		Aware.setSetting(getApplicationContext(), Settings.ACTION_AWARE_DATA_COLLECTION_STATUS, true);
+>>>>>>> d7510a25cfbfac4ab522db76268b68b2f3a887c2
 	}	
 }
